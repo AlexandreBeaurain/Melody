@@ -1,0 +1,2 @@
+melody_user:
+    resource: "@MelodyUserBundle/Resources/config/routing.yml"

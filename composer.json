@@ -1,0 +1,92 @@
+{
+	"name" : "AlexandreBeaurain/Melody",
+	"description" : "Ready to use fine tuned Symfony2 Framework",
+	"type" : "project",
+	"license" : "MIT",
+	"require" : {
+		"avocode/form-extensions-bundle" : "dev-master",
+		"cedriclombardot/admingenerator-generator-bundle" : "1.2.*@dev",
+		"doctrine/doctrine-bundle" : "~1.2",
+		"doctrine/inflector": "1.0.*@dev",
+		"doctrine/orm" : "~2.2,>=2.2.3",
+		"friendsofsymfony/user-bundle" : "~2.0@dev",
+		"gedmo/doctrine-extensions" : "2.3.*@dev",
+		"incenteev/composer-parameter-handler" : "~2.0",
+		"hwi/oauth-bundle" : "0.4.*@dev",
+		"knplabs/doctrine-behaviors" : "1.0.*@dev",
+		"leafo/lessphp" : "dev-master",
+		"leafo/scssphp-compass" : "dev-master",
+		"leafo/scssphp" : "dev-master",
+		"melody/admin" : "dev-master",
+		"melody/model" : "dev-master",
+		"melody/user" : "dev-master",
+		"php" : ">=5.3",
+		"propel/propel-bundle" : "1.4.*@dev",
+		"richthegeek/phpsass" : "dev-master",
+		"scan/kss-bundle": "dev-master",
+		"sensio/distribution-bundle" : "~3.0",
+		"sensio/framework-extra-bundle" : "~3.0",
+		"symfony/assetic-bundle" : "~2.3",
+		"symfony/monolog-bundle" : "~2.4",
+		"symfony/swiftmailer-bundle" : "~2.3",
+		"symfony/symfony" : "2.5.*",
+		"toopay/assetic-minifier": "dev-master",
+		"twig/extensions" : "~1.0",
+		"twitter/bootstrap" : "3.1.*@dev",
+		"widop/google-analytics-bundle" : "1.1.*@dev",
+		"willdurand/propel-geocodable-behavior" : "dev-master",
+		"willdurand/propel-typehintable-behavior" : "dev-master"
+	},
+	"require-dev" : {
+		"sensio/generator-bundle" : "~2.3"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"" : "src/",
+			"SymfonyStandard" : "app/"
+		}
+	},
+	"repositories" : [{
+			"type" : "git",
+			"url" : "https://github.com/AlexandreBeaurain/MelodyModel"
+		}, {
+			"type" : "git",
+			"url" : "https://github.com/AlexandreBeaurain/MelodyUser"
+		}, {
+			"type" : "git",
+			"url" : "https://github.com/AlexandreBeaurain/MelodyAdmin"
+		}
+	],
+	"config" : {
+		"bin-dir" : "bin",
+		"component-dir" : "web/components"
+	},
+	"scripts" : {
+		"post-install-cmd" : [
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+		],
+		"post-update-cmd" : [
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+		]
+	},
+	"extra" : {
+		"branch-alias" : {
+			"dev-master" : "2.5-dev"
+		},
+		"incenteev-parameters" : {
+			"file" : "app/config/parameters.yml"
+		},
+		"symfony-app-dir" : "app",
+		"symfony-web-dir" : "web"
+	}
+}

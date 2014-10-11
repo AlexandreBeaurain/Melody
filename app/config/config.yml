@@ -1,0 +1,165 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Minifier Configuration
+minifier:
+    filter:
+        name:
+            css: ~
+            js: ~
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles: [AdmingeneratorGeneratorBundle,FOSUserBundle,AvocodeFormExtensionsBundle]
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        scssphp:
+            file: "%kernel.root_dir%/../vendor/leafo/scssphp/scss.inc.php"
+            apply_to: ".scss$"
+        lessphp:
+            file: "%kernel.root_dir%/../vendor/leafo/lessphp/lessc.inc.php"
+            apply_to: ".less$"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        # path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+
+# Propel Configuration
+propel:
+    dbal:
+        driver:               "%database_driver%"
+        user:                 "%database_user%"
+        password:             "%database_password%"
+        dsn:                  "%database_driver%:host=%database_host%;dbname=%database_name%;charset=UTF8"
+        options:              {}
+        attributes:           {}
+    logging:                  "%kernel.debug%"
+    behaviors:
+        class_table_inheritance: Melody\ModelBundle\Orm\Propel\Behavior\ClassTableInheritance
+        geocodable:              GeocodableBehavior
+    build_properties:
+        propel.addTimeStamp:  false
+        propel.behavior.class_table_inheritance.class:  src.Melody.ModelBundle.Orm.Propel.Behavior.ClassTableInheritance
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+
+# FosUser Configuration
+fos_user:
+    db_driver:     "%orm_fos%"
+    firewall_name: main
+    user_class:    Melody\UserBundle\%orm_directory%\Person
+
+# HWIOAuth Configuration
+hwi_oauth:
+    firewall_name: account
+    connect:
+        confirmation: true
+    fosub:
+        username_iterations: 30
+        properties:
+            google: google
+    resource_owners:
+        google:
+            type:                        google
+            client_id:                   xxxxclientidxxxx.apps.googleusercontent.com
+            client_secret:               xxxxclientsecretxxxx
+            scope:                       "email profile"
+        facebook:
+            type:                        facebook
+            client_id:                   xxxxclientidxxxx
+            client_secret:               xxxxclientsecretxxxx
+            scope:                       "email profile"
+        twitter:
+            type:                        twitter
+            client_id:                   xxxxclientidxxxx
+            client_secret:               xxxxclientsecretxxxx
+            scope:                       "email profile"
+
+# AdminGenerator Configuration
+admingenerator_generator:
+    use_propel:       "%orm_propel%"
+    use_doctrine_orm: "%orm_doctrine%"
+    base_admin_template: MelodyAdminBundle::base_admin.html.twig
+    stylesheets:
+      - { path: bundles/admin/css/common.css }
+    templates_dirs:
+        - "%kernel.root_dir%/../vendor/melody/admin/Resources/templates"
+        - "%kernel.root_dir%/../vendor/cedriclombardot/admingenerator-generator-bundle/Admingenerator/GeneratorBundle/Resources/templates"
+    form_types:
+        propel:
+            TIMESTAMP:    afe_datetime_picker 
+            BU_TIMESTAMP: afe_datetime_picker 
+            DATE:         afe_date_picker 
+            BU_DATE:      afe_date_picker 
+            TIME:         afe_time_picker 
+# Knp Menu Configuration
+knp_menu:
+    providers:
+        builder_alias: true
+        container_aware: true
+        
+# services
+services: 
+    menu_builder:
+        class: Melody\AdminBundle\Menu\Builder
+        arguments: ["@knp_menu.factory","@service_container"]
+      
+    menu.admin:
+        class: Knp\Menu\MenuItem
+        factory_service: menu_builder
+        factory_method: createAdminMenu
+        arguments: ["@request"]
+        scope: request
+        tags:
+          - { name: knp_menu.menu, alias: admin }

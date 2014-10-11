@@ -1,0 +1,40 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        account:
+            pattern: ^/account
+            oauth:
+                provider:               fos_userbundle
+                failure_path:           /account/connect
+                login_path:             /account/connect
+                check_path:             /account/connect
+                use_forward:            false
+                resource_owners:
+                    google:             "/account/login/check-google"
+                    facebook:           "/account/login/check-facebook"
+                    twitter:            "/account/login/check-twitter"
+                oauth_user_provider:
+                    service:            hwi_oauth.user.provider.fosub_bridge
+            anonymous: true
+
+    access_control:
+        - { path: ^/account/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account, roles: ROLE_USER }
+        - { path: ^/admin, role: ROLE_ADMIN }
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
